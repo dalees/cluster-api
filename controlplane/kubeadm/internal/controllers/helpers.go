@@ -51,6 +51,10 @@ func (r *KubeadmControlPlaneReconciler) reconcileKubeconfig(ctx context.Context,
 	log := ctrl.LoggerFrom(ctx)
 
 	endpoint := cluster.Spec.ControlPlaneEndpoint
+	if cluster.Spec.ManagementEndpoint.IsValid() {
+		// NOTE(dalees): Use management endpoint for kubeconfig, if available.
+		endpoint = cluster.Spec.ManagementEndpoint
+	}
 	if endpoint.IsZero() {
 		return ctrl.Result{}, nil
 	}

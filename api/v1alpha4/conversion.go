@@ -21,6 +21,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/conversion"
 
 	clusterv1 "sigs.k8s.io/cluster-api/api/v1beta1"
+	v1beta1 "sigs.k8s.io/cluster-api/api/v1beta1"
 	utilconversion "sigs.k8s.io/cluster-api/util/conversion"
 )
 
@@ -374,4 +375,9 @@ func Convert_v1beta1_MachineStatus_To_v1alpha4_MachineStatus(in *clusterv1.Machi
 func Convert_v1beta1_ClusterClass_To_v1alpha4_ClusterClass(in *clusterv1.ClusterClass, out *ClusterClass, s apiconversion.Scope) error {
 	// ClusterClass.Status has been added in v1beta1.
 	return autoConvert_v1beta1_ClusterClass_To_v1alpha4_ClusterClass(in, out, s)
+}
+
+func Convert_v1beta1_ClusterSpec_To_v1alpha4_ClusterSpec(in *v1beta1.ClusterSpec, out *ClusterSpec, s apiconversion.Scope) error {
+	// NOTE(dalees): Added ClusterSpec.ManagementEndpoint in v1beta1
+	return autoConvert_v1beta1_ClusterSpec_To_v1alpha4_ClusterSpec(in, out, s)
 }

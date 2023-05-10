@@ -307,6 +307,24 @@ func (r *KubeadmControlPlaneReconciler) reconcile(ctx context.Context, cluster *
 		return ctrl.Result{}, nil
 	}
 
+	// NOTE(dalees): If we have a valid Management Endpoint, ensure it is included in certSAN.
+	if cluster.Spec.ManagementEndpoint.IsValid() {
+		cert_sans := kcp.Spec.KubeadmConfigSpec.ClusterConfiguration.APIServer.CertSANs
+		management_host := cluster.Spec.ManagementEndpoint.Host
+		found := false
+		for _, san := range cert_sans {
+			if san == management_host {
+				found = true
+				break
+			}
+		}
+		if !found {
+			log.Info("Adding management host to APIServer CertSAN.")
+			cert_sans = append(cert_sans, management_host)
+			kcp.Spec.KubeadmConfigSpec.ClusterConfiguration.APIServer.CertSANs = cert_sans
+		}
+	}
+
 	// Generate Cluster Kubeconfig if needed
 	if result, err := r.reconcileKubeconfig(ctx, cluster, kcp); !result.IsZero() || err != nil {
 		if err != nil {

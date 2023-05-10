@@ -205,6 +205,14 @@ func (r *Reconciler) reconcileInfrastructure(ctx context.Context, cluster *clust
 		}
 	}
 
+	// NOTE(dalees): Get, parse and store the management loadbalancer endpoint.
+	if !cluster.Spec.ManagementEndpoint.IsValid() {
+		if err := util.UnstructuredUnmarshalField(infraConfig, &cluster.Spec.ManagementEndpoint, "spec", "managementLoadbalancerEndpoint"); err != nil {
+			return ctrl.Result{}, errors.Wrapf(err, "failed to retrieve Spec.ManagementEndpoint from infrastructure provider for Cluster %q in namespace %q",
+				cluster.Name, cluster.Namespace)
+		}
+	}
+
 	// Get and parse Status.FailureDomains from the infrastructure provider.
 	failureDomains := clusterv1.FailureDomains{}
 	if err := util.UnstructuredUnmarshalField(infraConfig, &failureDomains, "status", "failureDomains"); err != nil && err != util.ErrUnstructuredFieldNotFound {

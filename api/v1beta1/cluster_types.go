@@ -52,6 +52,12 @@ type ClusterSpec struct {
 	// +optional
 	ControlPlaneEndpoint APIEndpoint `json:"controlPlaneEndpoint,omitempty"`
 
+	// ManagementEndpoint represents the endpoint used to communicate with the control plane.
+	// This should be used by CAPI, but not replace ControlPlaneEndpoint which is used by nodes
+	// and kubeconfig.
+	// +optional
+	ManagementEndpoint APIEndpoint `json:"managementEndpoint,omitempty"`
+
 	// ControlPlaneRef is an optional reference to a provider-specific resource that holds
 	// the details for provisioning the Control Plane for a Cluster.
 	// +optional

@@ -820,6 +820,22 @@ spec:
                     type: string
                 type: object
                 x-kubernetes-map-type: atomic
+              managementEndpoint:
+                description: ManagementEndpoint represents the endpoint used to communicate
+                  with the control plane. This should be used by CAPI, but not replace
+                  ControlPlaneEndpoint which is used by nodes and kubeconfig.
+                properties:
+                  host:
+                    description: The hostname on which the API server is serving.
+                    type: string
+                  port:
+                    description: The port on which the API server is serving.
+                    format: int32
+                    type: integer
+                required:
+                - host
+                - port
+                type: object
               paused:
                 description: Paused can be used to prevent controllers from processing
                   the Cluster and all its associated objects.

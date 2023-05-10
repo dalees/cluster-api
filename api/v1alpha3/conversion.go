@@ -285,6 +285,7 @@ func Convert_v1beta1_MachineSetStatus_To_v1alpha3_MachineSetStatus(in *clusterv1
 
 func Convert_v1beta1_ClusterSpec_To_v1alpha3_ClusterSpec(in *clusterv1.ClusterSpec, out *ClusterSpec, s apiconversion.Scope) error {
 	// NOTE: custom conversion func is required because spec.Topology does not exist in v1alpha3
+	// NOTE(dalees): Added ClusterSpec.ManagementEndpoint in v1beta1
 	return autoConvert_v1beta1_ClusterSpec_To_v1alpha3_ClusterSpec(in, out, s)
 }
 
